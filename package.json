@@ -1,0 +1,50 @@
+{
+  "name": "@glowland/discord-music",
+  "version": "0.2.2",
+  "description": "Reusable Discord music module for bots using discord.js.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/glowland-dev/discord-music.git"
+  },
+  "homepage": "https://github.com/glowland-dev/discord-music#readme",
+  "bugs": {
+    "url": "https://github.com/glowland-dev/discord-music/issues"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@discordjs/opus": "^0.10.0",
+    "@discordjs/voice": "^0.19.2"
+  },
+  "peerDependencies": {
+    "discord.js": "^14.26.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "discord.js": "^14.26.0",
+    "typescript": "^6.0.3"
+  },
+  "keywords": [
+    "discord",
+    "music",
+    "discord.js",
+    "voice",
+    "glowland"
+  ],
+  "sideEffects": false,
+  "license": "ISC"
+}
