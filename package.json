@@ -1,6 +1,6 @@
 {
   "name": "@glowland/discord-music",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Reusable Discord music module for bots using discord.js.",
   "type": "module",
   "main": "./dist/index.js",
