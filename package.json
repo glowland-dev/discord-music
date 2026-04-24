@@ -24,14 +24,20 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "release:patch": "npm version patch && git push --follow-tags",
+    "release:minor": "npm version minor && git push --follow-tags",
+    "release:major": "npm version major && git push --follow-tags"
   },
   "dependencies": {
-    "@discordjs/opus": "^0.10.0",
     "@discordjs/voice": "^0.19.2"
   },
   "peerDependencies": {
     "discord.js": "^14.26.0"
+  },
+  "optionalDependencies": {
+    "opusscript": "^0.0.7",
+    "libsodium-wrappers": "^0.8.4"
   },
   "devDependencies": {
     "@types/node": "^25.5.0",
