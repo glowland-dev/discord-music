@@ -336,6 +336,34 @@ class GuildMusicSession extends TypedEventEmitter<MusicEvents> {
     });
   }
 
+  async selectRelative(offset: number): Promise<GuildMusicTrack | null> {
+    return this.tasks.run(async () => {
+      if (!this.current) return null;
+
+      const timeline = [...this.history, this.current, ...this.queue];
+      const currentIndex = this.history.length;
+      const targetIndex = currentIndex + offset;
+
+      const target = timeline[targetIndex];
+      if (!target) return null;
+
+      if (target === this.current) return this.current;
+
+      this.history = timeline.slice(0, targetIndex);
+      this.current = target;
+      this.queue = timeline.slice(targetIndex + 1);
+
+      this.emit("queueUpdate", this);
+
+      this.pushCurrentToHistoryOnIdle = false;
+      this.skipRequested = true;
+      this.player.stop(true);
+      this.cleanupPlayback(false);
+
+      return target;
+    });
+  }
+
   private emitState(): void {
     this.emit("stateChange", this);
   }

@@ -58,6 +58,11 @@ export type NextResult =
   | { ok: false; code: "NO_NEXT_TRACK" }
   | { ok: true; code: "NEXT"; track: GuildMusicTrack };
 
+export type SelectResult =
+  | { ok: false; code: "NOT_PLAYING" }
+  | { ok: false; code: "OUT_OF_RANGE" }
+  | { ok: true; code: "SELECTED"; track: GuildMusicTrack };
+
 class GuildMusicController {
   constructor(private readonly manager: GuildMusicManager) {}
 
@@ -213,6 +218,22 @@ class GuildMusicController {
     }
 
     return { ok: true, code: "NEXT", track: next };
+  }
+
+  async jump(guildId: string, offset: number): Promise<SelectResult> {
+    const session = this.manager.find(guildId);
+
+    if (!session || !session.current) {
+      return { ok: false, code: "NOT_PLAYING" };
+    }
+
+    const track = await session.selectRelative(offset);
+
+    if (!track) {
+      return { ok: false, code: "OUT_OF_RANGE" };
+    }
+
+    return { ok: true, code: "SELECTED", track };
   }
 }
 
