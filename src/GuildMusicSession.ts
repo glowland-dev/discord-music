@@ -350,15 +350,17 @@ class GuildMusicSession extends TypedEventEmitter<MusicEvents> {
       if (target === this.current) return this.current;
 
       this.history = timeline.slice(0, targetIndex);
-      this.current = target;
       this.queue = timeline.slice(targetIndex + 1);
 
       this.emit("queueUpdate", this);
 
-      this.pushCurrentToHistoryOnIdle = false;
-      this.skipRequested = true;
+      this.suppressNextIdle = true;
       this.player.stop(true);
-      this.cleanupPlayback(false);
+      this.cleanupPlayback(true);
+
+      await this.playTrackInternal(target);
+
+      this.emitState();
 
       return target;
     });
