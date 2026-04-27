@@ -1,6 +1,6 @@
 # @glowland/discord-music
 
-Event-driven music engine for Discord bots using discord.js.
+Event-driven music engine for Discord bots built on `discord.js`.
 
 ---
 
@@ -22,16 +22,68 @@ npm install @glowland/discord-music discord.js
 
 ---
 
-## Runtime Dependencies
+## Dependencies
 
-This package automatically installs the required voice stack:
-
-* `@discordjs/voice`
-* `@discordjs/opus`
-
-You only need to install:
+### Required
 
 * `discord.js` (peer dependency)
+
+You must install it yourself:
+
+```bash
+npm install discord.js
+```
+
+---
+
+### Voice stack
+
+This package uses:
+
+* `@discordjs/voice` (installed automatically)
+
+---
+
+### Opus (optional, recommended)
+
+```bash
+npm install opusscript
+```
+
+Provides a JavaScript-based Opus encoder.
+
+Acts as a fallback for `@discordjs/opus`.
+
+---
+
+### Native Opus (optional, higher performance)
+
+```bash
+npm install @discordjs/opus
+```
+
+Provides native bindings for Opus encoding.
+
+* Better raw performance than `opusscript`
+* May include high severity vulnerabilities depending on version
+
+Use if you prioritize performance and accept the trade-offs.
+
+---
+
+### Encryption (optional)
+
+```bash
+npm install libsodium-wrappers
+```
+
+Used by `@discordjs/voice` for encryption.
+
+Does **not** replace `opusscript` or `@discordjs/opus`.
+
+---
+
+Both are optional. The engine runs without them, but performance may be lower.
 
 ---
 
@@ -39,16 +91,13 @@ You only need to install:
 
 ### FFmpeg (required)
 
-FFmpeg must be installed and available in your system PATH.
+FFmpeg must be installed and available in your system `PATH`.
 
 **Windows (Chocolatey):**
 
 ```bash
 choco install ffmpeg
 ```
-
-**Manual:**
-[https://ffmpeg.org/download.html](https://ffmpeg.org/download.html)
 
 **Linux:**
 
@@ -62,13 +111,16 @@ sudo apt install ffmpeg
 brew install ffmpeg
 ```
 
+Manual:
+[https://ffmpeg.org/download.html](https://ffmpeg.org/download.html)
+
 ---
 
 ### yt-dlp (required)
 
-This package relies on `yt-dlp` for audio extraction.
+Used for audio extraction.
 
-Install and make sure it is available in your PATH:
+Install and ensure it is in your `PATH`:
 
 **Windows (Chocolatey):**
 
@@ -76,14 +128,14 @@ Install and make sure it is available in your PATH:
 choco install yt-dlp
 ```
 
-**Manual:**
+Manual:
 [https://github.com/yt-dlp/yt-dlp](https://github.com/yt-dlp/yt-dlp)
 
 ---
 
 ## Usage
 
-```js
+```ts
 import {
   GuildMusicManager,
   GuildMusicController
@@ -101,7 +153,7 @@ manager.on("trackStart", (session, track) => {
 
 ## Events
 
-The engine is fully event-driven. You are responsible for reacting to state changes.
+The engine is fully event-driven. You react to state changes.
 
 * `stateChange`
 * `trackStart`
@@ -119,9 +171,9 @@ The engine is fully event-driven. You are responsible for reacting to state chan
 
 ## Notes
 
-* This package does **NOT** handle UI.
-* You are responsible for embeds, buttons, and interaction layers.
-* Designed as a core engine, not a full bot solution.
+* No UI included
+* You handle embeds, buttons, and interactions
+* Designed as a core engine, not a full bot solution
 
 ---
 
