@@ -84,7 +84,13 @@ export function createDirectPlayable(url: string): PlayableProcess {
 export function createYtdlpPlayable(inputUrl: string): PlayableProcess {
   const ytdlp = spawn(
     "yt-dlp",
-    ["-f", "bestaudio/best", "-o", "-", "--no-playlist", inputUrl],
+    [
+      "--quiet",
+      "--format bestaudio/best",
+      "--output -",
+      "--no-playlist",
+      inputUrl,
+    ],
     { stdio: ["ignore", "pipe", "pipe"] },
   );
 
