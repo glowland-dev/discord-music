@@ -86,9 +86,15 @@ export function createYtdlpPlayable(inputUrl: string): PlayableProcess {
     "yt-dlp",
     [
       "--quiet",
-      "--format bestaudio/best",
-      "--output -",
       "--no-playlist",
+      "--format",
+      "bestaudio/best",
+      "--output",
+      "-",
+      "--reconnect",
+      "--reconnect-streamed",
+      "--reconnect-delay-max",
+      "5",
       inputUrl,
     ],
     { stdio: ["ignore", "pipe", "pipe"] },
@@ -123,6 +129,7 @@ export function createYtdlpPlayable(inputUrl: string): PlayableProcess {
   ffmpeg.stdin!.on("error", (error: NodeJS.ErrnoException) => {
     if (error.code !== "EPIPE" && error.code !== "ERR_STREAM_DESTROYED") {
       console.error("[ffmpeg:stdin]", error);
+      kill();
     }
   });
 
@@ -145,7 +152,11 @@ export function createYtdlpPlayable(inputUrl: string): PlayableProcess {
     safeKill(ffmpeg, signal);
   });
 
-  ytdlp.once("close", () => {
+  ytdlp.once("close", (code) => {
+    if (code !== 0 && code !== null) {
+      console.error(`[yt-dlp] exited with code ${code}`);
+    }
+
     try {
       if (ffmpeg.stdin && !ffmpeg.stdin.destroyed && !ffmpeg.killed) {
         ffmpeg.stdin.end();
