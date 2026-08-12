@@ -8,26 +8,25 @@ export async function resolveSearch(
   query: string,
   requestedById: string,
 ): Promise<GuildMusicTrack> {
-  const searchUrl = `https://music.youtube.com/search?q=${encodeURIComponent(query)}`;
-
   const search = (await runYtDlpJson([
     "--dump-single-json",
     "--flat-playlist",
     "--playlist-end",
     "1",
-    searchUrl,
+    `ytsearch1:${query}`,
   ])) as YtDlpSearchResult;
 
   const first = search.entries?.[0];
+
   if (!first) {
     throw new Error("No results found.");
   }
 
   const url =
     first.webpage_url ??
-    (first.id ? `https://music.youtube.com/watch?v=${first.id}` : null) ??
+    first.original_url ??
     first.url ??
-    first.original_url;
+    (first.id ? `https://music.youtube.com/watch?v=${first.id}` : null);
 
   if (!url) {
     throw new Error("Search result is missing URL.");
